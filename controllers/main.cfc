@@ -1,12 +1,14 @@
 component {
 
-	function getQuestionService() { return variables.questionService; }
-	function setQuestionService(any questionservice) {
-		variables.questionService = arguments.questionservice;
-	}
-
 	function init(fw) {
 		variables.fw = arguments.fw;
+	}
+
+	function getQuestionService() {
+		return variables.questionService;
+	}
+	function setQuestionService(any questionservice) {
+		variables.questionService = arguments.questionservice;
 	}
 	
 	function startDefault(any rc) {		

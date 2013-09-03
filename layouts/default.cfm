@@ -1,3 +1,4 @@
+<cfparam name="rc.authenticated" default="false">
 <cfparam name="rc.pagetitle" default="QBall">
 
 <cfoutput>
@@ -9,19 +10,21 @@
 </head>
 
 <body>
-
 <div id="header">
 <a href="index.cfm">Home</a> - 
-<a href="?#framework.action#=question.list">Questions</a> -
+<a href="#buildUrl('question.list')#">Questions</a> -
 <cfif not rc.authenticated>
-<a href="?#framework.action#=user.login">Login/Register</a>
+<a href="#buildUrl('user.login')#">Login/Register</a>
 <cfelse>
-<a href="?#framework.action#=question.new">Ask a Question</a> -
-<a href="?#framework.action#=user.logout">Logout</a> - Welcome, #rc.user.getUsername()#
+<a href="#buildUrl('question.new')#">Ask a Question</a> -
+<a href="#buildUrl('user.logout')#">Logout</a> - Welcome, #rc.user.getUsername()#
 </cfif>
 </div>
 
 <div id="body">
+<cfif structKeyExists(rc, "errors")>
+#rc.errors#<br>
+</cfif>
 #body#
 </div>
 

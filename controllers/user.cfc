@@ -11,7 +11,9 @@ component {
 	
 	function checkAuthorization(any rc) {
 		rc.authenticated = structKeyExists(session, "userid");
-		if(rc.authenticated) rc.user = getUserService().get(session.userid);
+		if(rc.authenticated) {
+			 rc.user = getUserService().get(session.userid);	
+		}
 	}
 
 	function startAuthenticate(any rc) {		
@@ -54,6 +56,7 @@ component {
 	}
 
 	function endRegister(any rc) {
+		rc.data = rc.registererrors;
 		if(isSimpleValue(rc.data)) {
 			rc.registererrors[1] = rc.data;
 			variables.fw.redirect("user.login", "username,email,registererrors");			

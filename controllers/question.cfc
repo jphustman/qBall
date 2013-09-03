@@ -11,12 +11,20 @@ component {
 
 	//Used by a few methods to validate/load a question
 	private function loadQuestion(any rc) {
-		if(!structKeyExists(rc, "questionid") || !isNumeric(rc.questionid) || rc.questionid <= 0) variables.fw.redirect("main.default");
+		if(!structKeyExists(rc, "questionid") || !isNumeric(rc.questionid) || rc.questionid <= 0) {
+			variables.fw.redirect("main.default");
+		}
 		rc.question = getQuestionService().get(rc.questionid);
 	}
 	
 	function startList(any rc) {
-		if(structKeyExists(rc, "start") && (!isNumeric(rc.start) || rc.start <= 0 || round(rc.start) != rc.start)) rc.start = 1;
+		if (!structKeyExists(rc, "authenticated")) {
+			rc.errors = "You are not logged in";
+			variables.fw.redirect("main.default", "errors");
+		}
+		if(structKeyExists(rc, "start") && (!isNumeric(rc.start) || rc.start <= 0 || round(rc.start) != rc.start)) {
+			rc.start = 1;
+		}
 	}
 		
 	function startPost(any rc) {		

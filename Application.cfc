@@ -1,4 +1,4 @@
-component extends="fw1.framework" {
+component extends="framework" {
 
 	this.name = "qball";
 	this.sessionManagement = true;
@@ -15,7 +15,8 @@ component extends="fw1.framework" {
 	this.mappings["/root"] = getDirectoryFromPath(getCurrentTemplatePath());
 
 	variables.framework = {
-		reloadApplicationOnEveryRequest=false
+		reloadApplicationOnEveryRequest=false,
+		trace=true
 	};
 	
 	public function setupApplication() {
@@ -30,8 +31,9 @@ component extends="fw1.framework" {
 			ormReload();
 			location(url="index.cfm",addToken=false);
 		}
-		var userController = getController("user");
-		doController(userController, "checkAuthorization");		
+		//var userController = getController("user");
+		//doController(userController, "checkAuthorization");		
+		controller("user.checkAuthorizaion");
 	}
 
 }

@@ -9,13 +9,13 @@ QBall is an question and answer application. Users can write questions or respon
 <cfif rc.authenticated>
 	<cfoutput>
 	<p>
-	<a href="?#framework.action#=question.new">Ask a Question!</a>
+	<a href="#buildUrl('question.new')#">Ask a Question!</a>
 	</p>
 	</cfoutput>
 <cfelse>
 	<cfoutput>
 	<p>
-	To ask your own question (or respond to others), please <a href="?#framework.action#=user.login">login or register</a>.
+	To ask your own question (or respond to others), please <a href="#buildUrl('user.login')#">login or register</a>.
 	</p>
 	</cfoutput>
 </cfif>

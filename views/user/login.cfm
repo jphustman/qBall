@@ -18,7 +18,7 @@ Existing users can login using the form below:
 </cfif>
 
 <cfoutput>
-<form action="?#framework.action#=user.authenticate" method="post">
+<form action="#buildUrl('user.authenticate')#" method="post">
 <b>username:</b> <input type="text" name="username" value="#rc.username#"><br/>
 <b>password:</b> <input type="password" name="password"><br/>
 <input type="submit" value="Login">
@@ -40,7 +40,7 @@ New users can register using the form below. All fields are required.
 </cfif>
 
 <cfoutput>
-<form action="?#framework.action#=user.register" method="post">
+<form action="#buildUrl('user.register')#" method="post">
 <b>username:</b> <input type="text" name="username" value="#rc.username#"><br/>
 <b>password:</b> <input type="password" name="password"><br/>
 <b>confirm password:</b> <input type="password" name="password2"><br/>

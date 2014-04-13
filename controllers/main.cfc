@@ -1,18 +1,13 @@
-component {
+component accessors="true" {
 
-	function init(fw) {
-		variables.fw = arguments.fw;
-	}
+    property questionService;
 
-	function getQuestionService() {
-		return variables.questionService;
-	}
-	function setQuestionService(any questionservice) {
-		variables.questionService = arguments.questionservice;
-	}
-	
-	function startDefault(any rc) {		
-		rc.questions = getQuestionService().list(perpage=5);
-	}
-		
+    function init(fw) {
+        variables.fw = fw;
+    }
+
+    function default(rc) {
+        rc.questions = questionService.list(perpage=5);
+    }
+
 }

@@ -2,6 +2,7 @@
 <cfparam name="rc.pagetitle" default="QBall">
 
 <cfoutput>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -11,7 +12,7 @@
 
 <body>
 <div id="header">
-<a href="index.cfm">Home</a> - 
+<a href="index.cfm">Home</a> -
 <a href="#buildUrl('question.list')#">Questions</a> -
 <cfif not rc.authenticated>
 <a href="#buildUrl('user.login')#">Login/Register</a>

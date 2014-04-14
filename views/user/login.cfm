@@ -1,7 +1,7 @@
 <cfset rc.pagetitle = "Login/Register">
 <cfparam name="rc.username" default="">
 <cfparam name="rc.email" default="">
-<cfparam name="rc.username" default="">
+<cfparam name="rc.password" default="">
 
 <h2>Login</h2>
 <p>

@@ -9,7 +9,6 @@ component {
     public any function authenticate(string username, string password) {
         writeLog(file='application',text='checking #username#/#password#');
         var user = entityLoad("user", {username=#username#, password=#password#},true);
-        writeDump(user);abort;
         if(!isNull(user)) {
             session.userid = user.getId();
             return user;

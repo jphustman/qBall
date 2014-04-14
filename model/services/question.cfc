@@ -14,16 +14,19 @@ component {
         var totalhql = "select count(id) as total from question";
         var result.count = ormExecuteQuery(totalhql, true);
 
-        /*writeDump(result);abort;*/
         return result;
     }
 
     public any function post(string title, string text, any user) {
-        var q = entityNew("question");
-        q.setTitle(arguments.title);
-        q.setText(arguments.text);
-        q.setUser(arguments.user);
-        entitySave(q);
+        transaction {
+            var thisUser = entityLoadByPk("user", user);
+            var q = entityNew("question");
+            q.setTitle(arguments.title);
+            q.setText(arguments.text);
+            q.setUser(thisUser);
+            entitySave(q);
+            transactionCommit();
+        }
         return q;
     }
 

@@ -20,7 +20,8 @@ component {
         if ( !session.auth.isLoggedIn &&
                 not listfindnocase( 'main.default', variables.fw.getFullyQualifiedAction() ) &&
                 not listfindnocase( 'user.login', variables.fw.getFullyQualifiedAction() ) &&
-                not listfindnocase( 'user.checkAuthorization', variables.fw.getFullyQualifiedAction() ) &&
+                not listfindnocase( 'user.register', variables.fw.getFullyQualifiedAction() ) &&
+                not listfindnocase( 'user.authenticate', variables.fw.getFullyQualifiedAction() ) &&
                 not listfindnocase( 'main.error', variables.fw.getFullyQualifiedAction() ) ) {
             variables.fw.redirect('main.default');
         }

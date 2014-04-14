@@ -27,22 +27,22 @@ Asked by #rc.question.getUser().getUsername()# on #dateFormat(rc.question.getCre
 			<cfset myClass = "answer">
 		</cfif>
 		<div class="#myClass#">
-		<b>Answer posted by #answer.getUser().getUsername()# on 
+		<b>Answer posted by #answer.getUser().getUsername()# on
 		#dateFormat(answer.getCreated(), "mmmm d, yyyy")# at #timeFormat(answer.getCreated(), "h:mm tt")#</b></br>
 
-		<cfif rc.authenticated>
+		<cfif session.auth.isloggedin>
 			<a href="?#framework.action#=question.voteanswerdown&answerid=#answer.getId()#&questionid=#rc.question.getId()#"><img src="images/heart_delete.png" title="Vote Down" border="0"></a>
-		</cfif> 
+		</cfif>
 		#arrayLen(answer.getDisapprovers())# Votes Against /
 		<cfif rc.authenticated>
 			<a href="?#framework.action#=question.voteanswerup&answerid=#answer.getId()#&questionid=#rc.question.getId()#"><img src="images/heart_add.png" title="Vote Up" border="0"></a>
 		</cfif>
-		#arrayLen(answer.getApprovers())# Votes For			
-		
+		#arrayLen(answer.getApprovers())# Votes For
+
 		<br/><br/>
-		
+
 		#paragraphFormat(answer.getText())#
-		
+
 		<cfif not answer.getSelectedAnswer() and rc.authenticated and (rc.question.getUser().getId() is rc.user.getId())>
 		<p align="right">
 		<a href="?#framework.action#=question.selectanswer&answerid=#answer.getId()#&questionid=#rc.question.getId()#">Mark this as the best answer.</a>
@@ -52,7 +52,7 @@ Asked by #rc.question.getUser().getUsername()# on #dateFormat(rc.question.getCre
 	</cfloop>
 </cfif>
 
-<cfif rc.authenticated>
+<cfif session.auth.isloggedin>
 	<form action="?#framework.action#=question.postanswer" method="post">
 	<input type="hidden" name="questionid" value="#rc.question.getId()#">
 	<b>Post your Answer:</b><br/>

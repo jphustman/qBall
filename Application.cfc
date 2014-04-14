@@ -9,7 +9,8 @@ component extends="framework.one" {
         cfclocation="./model/beans",
         /*dbcreate="dropcreate",*/
         dbcreate="update",
-        dialect="MySQL",
+        /*dialect="MySQL",*/
+        dialect="Oracle10G",
         //eventhandling="true",
         //eventhandler="model.beans.eventHandler",
         logsql="true"
@@ -17,8 +18,8 @@ component extends="framework.one" {
 
 
     variables.framework = {
-        reloadApplicationOnEveryRequest = true,
-        trace=true
+        reloadApplicationOnEveryRequest = "true",
+        trace = "true"
     };
 
     public function setupSession() {

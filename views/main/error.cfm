@@ -9,7 +9,7 @@
 		<li>Exception message: #request.exception.message#</li>
 		<li>Exception detail: #request.exception.detail#</li>
 		<li>Failed Method: <cfif structKeyExists( request, 'failedMethod' )>#request.failedMethod#<cfelse>unknown</cfif></li>
-        <li>Exeption: #request.exception#</li>
+        <li>Exeption: <cfdump var="#request.exception#"></li>
         <li>rc: <cfdump var="#rc#"/></li>
 	</ul>
 </cfoutput>

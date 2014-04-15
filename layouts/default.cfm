@@ -24,7 +24,7 @@
 
 <div id="body">
 <cfif structKeyExists(rc, "errors")>
-#rc.errors#<br>
+    <cfdump var="#rc.errors#"><br>
 </cfif>
 #body#
 </div>

@@ -51,7 +51,8 @@ component {
             variables.fw.redirect("question.new", "title,text,errors");
         }
 
-        rc.data = questionService.post(rc.title, rc.text, session.auth.userid);
+        rc.data = questionService.post(rc.title, rc.text,
+                                       session.auth.userid);
         //Right now we assume the post just worked
         rc.questionid = rc.data.getId();
         variables.fw.redirect("question.view","none","questionid");

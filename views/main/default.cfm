@@ -2,7 +2,6 @@
 <!---<cfdump var="#session#">--->
 <cfparam name="rc.questions" default="#structNew()#">
 <h1>Welcome to QBall</h1>
-<cfdump var="#session#">
 <p>
 QBall is an question and answer application. Users can write questions or respond to others. Users can also rate answers up and down.
 </p>

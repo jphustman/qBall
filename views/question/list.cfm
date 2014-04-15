@@ -1,8 +1,7 @@
 <cfset rc.pagetitle = "All Questions">
 <!--- rc.data is a struct containing the total num of questions and our page --->
-<cfdump var="#rc#" abort>
-<cfset questions = result.data.data>
-<cfset totalquestions = result.data.count>
+<cfset questions = rc.result.data>
+<cfset totalquestions = rc.result.count>
 <cfparam name="rc.start" default="1">
 
 

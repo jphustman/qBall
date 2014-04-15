@@ -10,7 +10,8 @@ component {
         writeLog(file='application',text='checking #username#/#password#');
         var user = entityLoad("user", {username=#username#, password=#password#},true);
         if(!isNull(user)) {
-            session.userid = user.getId();
+            session.auth.userid = user.getId();
+            session.auth.username = user.getUserName();
             return user;
         }
     }

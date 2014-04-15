@@ -1,10 +1,9 @@
 /**
  * I am the question controller.
- * @accessors true
  */
-component {
+component accessors="true" {
 
-    property questionService;
+    property question;
 
     function init(fw) {
         variables.fw = fw;
@@ -19,11 +18,12 @@ component {
             variables.fw.redirect("main.default");
         }
 
-        rc.question = questionService.get(rc.questionid);
 
     }
 
     public function list(rc) {
+        
+        rc.result = variables.question.list();
 
         /*if (!structKeyExists(session, "isLoggedIn")) {
             rc.errors = "You are not logged in";
@@ -51,7 +51,7 @@ component {
             variables.fw.redirect("question.new", "title,text,errors");
         }
 
-        rc.data = questionService.post(rc.title, rc.text,
+        rc.data = variables.question.post(rc.title, rc.text,
                                        session.auth.userid);
         //Right now we assume the post just worked
         rc.questionid = rc.data.getId();
@@ -59,9 +59,14 @@ component {
     }
 
     function postAnswer(rc) {
+
         loadQuestion(rc);
+        rc.question = variables.question.get(rc.questionid);
 
         rc.answer = trim(htmlEditFormat(rc.answer));
+        
+        variables.question.postAnswer(rc.question, rc.answer,
+                                        session.auth.userid);
 
         //Right now we assume the post just worked
         rc.questionid = rc.question.getId();
@@ -70,6 +75,7 @@ component {
 
     function selectAnswer(rc) {
         loadQuestion(rc);
+        rc.question = questionService.getQuestion(rc.questionid);
 
         if(!structKeyExists(rc, "user") || rc.user.getId() != rc.question.getUser().getID()) variables.fw.redirect("main.default");
 
@@ -79,18 +85,21 @@ component {
 
     function view(rc) {
         loadQuestion(rc);
+        rc.question = variables.question.get(rc.questionid);
     }
 
     function voteAnswerDown(rc) {
         loadQuestion(rc);
-
+        rc.question = variables.question.get(rc.questionid);
+        variables.question.voteAnswerDown(url.questionid, url.answerid, session.auth.userid);
         rc.questionid = rc.question.getId();
         variables.fw.redirect("question.view","none","questionid");
     }
 
     function voteAnswerUp(rc) {
         loadQuestion(rc);
-
+        rc.question = variables.question.get(rc.questionid);
+        variables.question.voteAnswerUp(url.questionid, url.answerid, session.auth.userid);
         rc.questionid = rc.question.getId();
         variables.fw.redirect("question.view","none","questionid");
     }

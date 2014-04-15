@@ -34,7 +34,7 @@ Asked by #rc.question.getUser().getUsername()# on #dateFormat(rc.question.getCre
 			<a href="?#framework.action#=question.voteanswerdown&answerid=#answer.getId()#&questionid=#rc.question.getId()#"><img src="images/heart_delete.png" title="Vote Down" border="0"></a>
 		</cfif>
 		#arrayLen(answer.getDisapprovers())# Votes Against /
-		<cfif rc.authenticated>
+		<cfif session.auth.isloggedin>
 			<a href="?#framework.action#=question.voteanswerup&answerid=#answer.getId()#&questionid=#rc.question.getId()#"><img src="images/heart_add.png" title="Vote Up" border="0"></a>
 		</cfif>
 		#arrayLen(answer.getApprovers())# Votes For
@@ -43,7 +43,7 @@ Asked by #rc.question.getUser().getUsername()# on #dateFormat(rc.question.getCre
 
 		#paragraphFormat(answer.getText())#
 
-		<cfif not answer.getSelectedAnswer() and rc.authenticated and (rc.question.getUser().getId() is rc.user.getId())>
+		<cfif not answer.getSelectedAnswer() and session.auth.isLoggedIn and (rc.question.getUser().getId() is session.auth.userId)>
 		<p align="right">
 		<a href="?#framework.action#=question.selectanswer&answerid=#answer.getId()#&questionid=#rc.question.getId()#">Mark this as the best answer.</a>
 		</p>

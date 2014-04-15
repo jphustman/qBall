@@ -19,7 +19,7 @@ component extends="framework.one" {
 
     variables.framework = {
         reloadApplicationOnEveryRequest = "true",
-        trace = "true"
+        trace = "false"
     };
 
     public function setupSession() {
@@ -37,8 +37,11 @@ component extends="framework.one" {
             ormReload();
             location(url="index.cfm",addToken=false);
         }
+        
         controller("security.authorize");
+        
 
+        
     }
 
 }

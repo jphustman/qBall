@@ -23,6 +23,7 @@ component {
             var q = entityNew("question");
             q.setTitle(arguments.title);
             q.setText(arguments.text);
+            q.setCreated(Now());
             q.setUser(thisUser);
             entitySave(q);
             transactionCommit();
@@ -31,13 +32,17 @@ component {
     }
 
     public void function postAnswer(any question, string answer, any user) {
-        var answerOb = entityNew("answer");
-        answerOb.setText(arguments.answer);
-        answerOb.setUser(arguments.user);
-        answerOb.setSelectedAnswer(false);
-        entitySave(answerOb);
-        question.addAnswer(answerOb);
-        entitySave(question);
+        transaction {
+	        var aUser =  entityLoadByPk("user", arguments.user);
+	        var answerOb = entityNew("answer");
+	        answerOb.setText(arguments.answer);
+	        answerOb.setUser(aUser);
+	        answerOb.setSelectedAnswer(false);
+	        entitySave(answerOb);
+	        question.addAnswer(answerOb);
+	        entitySave(question);
+	        transactionCommit();
+        }
     }
 
     public void function selectAnswer(any question, numeric answerid) {
@@ -52,18 +57,25 @@ component {
 
     public void function voteAnswerDown(any question, numeric answerid, any user) {
         //First, if we exist in the list of folks who voted up, kill me
-        var answer = entityLoadByPk("answer", arguments.answerid);
-        answer.removeApprover(user);
-        if(!answer.hasDisapprover(user)) answer.addDisapprover(user);
-        entitySave(answer);
+        transaction {
+	        var user = entityLoadByPk("user", arguments.user);
+	        var answer = entityLoadByPk("answer", arguments.answerid);
+	        answer.removeApprover(user);
+	        if(!answer.hasDisapprover(user)) answer.addDisapprover(user);
+	        entitySave(answer);
+        }
     }
 
     public void function voteAnswerUp(any question, numeric answerid, any user) {
         //First, if we exist in the list of folks who voted up, kill me
-        var answer = entityLoadByPk("answer", arguments.answerid);
-        answer.removeDisapprover(user);
-        if(!answer.hasApprover(user)) answer.addApprover(user);
-        entitySave(answer);
+        transaction {
+	        var user = entityLoadByPk("user", arguments.user);
+	        var answer = entityLoadByPk("answer", arguments.answerid);
+	        answer.removeDisapprover(user);
+	        if(!answer.hasApprover(user)) answer.addApprover(user);
+	        entitySave(answer);
+	        transactionCommit();
+        }
     }
 
 }

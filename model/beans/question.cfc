@@ -16,7 +16,11 @@ component persistent="true" {
             singularname="answer";
 
     public function getAnswered() {
-        var hql = "select a.id from question q join q.answers a where a.selectedanswer = 1 and q.id = ?";
+        var hql = "
+            select a.id
+            from question q join q.answers a
+            where a.selectedanswer = 1 and q.id = ?
+        ";
         var r = ormExecuteQuery(hql, [variables.id]);
         return arrayLen(r) is 1;
     }

@@ -1,4 +1,5 @@
-<cfparam name="rc.authenticated" default="false">
+<cfparam name="session.auth.isloggedin" default="false">
+<cfparam name="session.auth.username" default="Guest">
 <cfparam name="rc.pagetitle" default="QBall">
 
 <cfoutput>
@@ -14,11 +15,11 @@
 <div id="header">
 <a href="index.cfm">Home</a> -
 <a href="#buildUrl('question.list')#">Questions</a> -
-<cfif not rc.authenticated>
+<cfif not session.auth.isloggedin>
 <a href="#buildUrl('user.login')#">Login/Register</a>
 <cfelse>
 <a href="#buildUrl('question.new')#">Ask a Question</a> -
-<a href="#buildUrl('user.logout')#">Logout</a> - Welcome, #rc.user.getUsername()#
+<a href="#buildUrl('user.logout')#">Logout</a> - Welcome, #session.auth.username#
 </cfif>
 </div>
 

@@ -1,5 +1,3 @@
-<!---<cfdump var="#rc#">--->
-<!---<cfdump var="#session#">--->
 <cfparam name="rc.questions" default="#structNew()#">
 <h1>Welcome to QBall</h1>
 <p>

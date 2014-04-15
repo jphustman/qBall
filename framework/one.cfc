@@ -1,5 +1,5 @@
 component {
-    variables._fw1_version = "2.5_snapshot";
+    variables._fw1_version = "2.5RC1";
 /*
 	Copyright (c) 2009-2014, Sean Corfield, Marcin Szczepanski, Ryan Cogswell
 
@@ -806,11 +806,7 @@ component {
 		    if ( structKeyExists(request._fw1, 'view') ) {
                 internalFrameworkTrace( 'rendering #request._fw1.view#' );
 			    out = internalView( request._fw1.view );
-		    } else if ( structKeyExists(request._fw1, 'omvInProgress') ) {
-                internalFrameworkTrace( 'viewNotFound() called' );
-                viewNotFound();
-            } else {
-                request._fw1.omvInProgress = true;
+		    } else {
                 internalFrameworkTrace( 'onMissingView() called' );
 			    out = onMissingView( request.context );
 		    }
@@ -1184,11 +1180,7 @@ component {
 		    return internalView( viewPath, args );
         } else if ( isSimpleValue( missingView ) ) {
             return missingView;
-		} else if ( structKeyExists(request._fw1, 'omvInProgress') ) {
-            internalFrameworkTrace( 'view( #path# ) called - viewNotFound() called' );
-            viewNotFound();
         } else {
-            request._fw1.omvInProgress = true;
             internalFrameworkTrace( 'view( #path# ) called - onMissingView() called' );
             return onMissingView( request.context );
         }
@@ -1377,7 +1369,7 @@ component {
 	}
 	
 	private void function dumpException( any exception ) {
-		writeDump( var = exception, label = 'Exception - click to expand', expand = false );
+		writeDump( var = exception, label = 'Exception' );
 	}
 	
 	private void function ensureNewFrameworkStructsExist() {
@@ -1470,24 +1462,17 @@ component {
              arrayLen( request._fw1.trace ) &&
              !structKeyExists( request._fw1, 'renderData' ) ) {
             setupTraceRender();
-        }
-        // re-test to allow for setupTraceRender() handling / disabling tracing
-        if ( request._fw1.doTrace &&
-             arrayLen( request._fw1.trace ) &&
-             !structKeyExists( request._fw1, 'renderData' ) ) {
             var startTime = request._fw1.trace[1].tick;
             var font = 'font-family: verdana, helvetica;';
             writeOutput( '<hr /><div style="background: ##ccdddd; color: black; border: 1px solid; border-color: black; padding: 5px; #font#">' );
             writeOutput( '<div style="#font# font-weight: bold; font-size: large; float: left;">Framework Lifecycle Trace</div><div style="clear: both;"></div>' );
-            var table = '<table style="border: 1px solid; border-color: black; color: black; #font#" width="100%"><tr><th style="text-align:right;">time</th><th style="text-align:right;">delta</th><th>action</th><th>message</th></tr>';
+            var table = '<table style="border: 1px solid; border-color: black; color: black; #font#" width="100%">';
             writeOutput( table );
             var colors = [ '##ccd4dd', '##ccddcc' ];
             var row = 0;
             var n = arrayLen( request._fw1.trace );
-			var lastDuration = 0;
             for ( var i = 1; i <= n; ++i ) {
                 var trace = request._fw1.trace[i];
-	            var nextTraceTick = i + 1 <= n ? request._fw1.trace[i+1].tick : trace.tick;
                 var action = '';
                 if ( trace.s == variables.magicApplicationController || trace.sub == variables.magicApplicationSubsystem ) {
                     action = '<em>Application.cfc</em>';
@@ -1507,15 +1492,8 @@ component {
                 }
                 ++row;
                 writeOutput( '<tr style="border: 0; background: #colors[1 + row mod 2]#;">' );
-                writeOutput( '<td style="border: 0; color: black; #font# font-size: small; text-align:right;" width="5%">#trace.tick - starttime#ms</td>' );
-	            writeOutput( '<td style="border: 0; color: black; #font# font-size: small; text-align:right;" width="5%">');
-	            var duration = nextTraceTick - startTime;
-	            if ((duration - lastDuration) > 0) {
-		            writeOutput('#duration - lastDuration#ms');
-                }
-				lastDuration = duration;
-				writeOutput('</td>' );
-                writeOutput( '<td style="border: 0; color: black; #font# font-size: small;padding-left: 5px;" width="10%">#action#</td>' );
+                writeOutput( '<td style="border: 0; color: black; #font# font-size: small;" width="5%">#trace.tick - startTime#ms</td>' );
+                writeOutput( '<td style="border: 0; color: black; #font# font-size: small;" width="10%">#action#</td>' );
                 var color =
                     trace.msg.startsWith( 'no ' ) ? '##cc8888' :
                         trace.msg.startsWith( 'onError( ' ) ? '##cc0000' : '##0000';
@@ -2075,8 +2053,6 @@ component {
 		if ( !structKeyExists(variables, 'framework') ) {
 			variables.framework = { };
 		}
-	    variables.framework.version = variables._fw1_version;
-        var env = setupFrameworkEnvironments();
 		if ( !structKeyExists(variables.framework, 'action') ) {
 			variables.framework.action = 'action';
 		}
@@ -2207,11 +2183,12 @@ component {
 		if ( !structKeyExists( variables.framework, 'trace' ) ) {
 			variables.framework.trace = false;
 		}
-        setupEnvironment( env );
         request._fw1.doTrace = variables.framework.trace;
+	    variables.framework.version = variables._fw1_version;
+        setupFrameworkEnvironments();
 	}
 
-    private string function setupFrameworkEnvironments() {
+    private void function setupFrameworkEnvironments() {
         var env = getEnvironment();
         if ( structKeyExists( variables.framework, 'environments' ) ) {
             var envs = variables.framework.environments;
@@ -2223,7 +2200,7 @@ component {
                 structAppend( variables.framework, envs[ env ] );
             }
         }
-        return env;
+        setupEnvironment( env );
     }
 
 	private void function setupRequestDefaults() {

@@ -7,10 +7,10 @@ component extends="framework.one" {
     this.ormEnabled = true;
     this.ormsettings = {
         cfclocation="./model/beans",
-        /*dbcreate="dropcreate",*/
-        dbcreate="update",
-        dialect="MySQL",
-        /*dialect="Oracle10G",*/
+        dbcreate="dropcreate",
+        /*dbcreate="update",*/
+        /*dialect="MySQL",*/
+        dialect="Oracle10G",
         //eventhandling="true",
         //eventhandler="model.beans.eventHandler",
         logsql="true"
@@ -37,11 +37,9 @@ component extends="framework.one" {
             ormReload();
             location(url="index.cfm",addToken=false);
         }
-        
-        controller("security.authorize");
-        
 
-        
+        controller("security.authorize");
+
     }
 
 }

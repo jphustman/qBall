@@ -1,13 +1,17 @@
-component accessors="true" {
+/**
+ * I am the main controller.
+ * @accessors true
+ */
+component {
 
-    property questionService;
+    property question;
 
-    function init(fw) {
+    public function init(fw) {
         variables.fw = fw;
     }
 
-    function default(rc) {
-        rc.questions = questionService.list(perpage=5);
+    public function default(rc) {
+        rc.questions = variables.question.list(perpage=5);
     }
 
 }

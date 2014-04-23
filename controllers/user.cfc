@@ -1,22 +1,23 @@
 /**
  * I am the User controller.
+ * @accessors true
  */
-component accessors="true" {
+component {
 
-    property userService;
+    property user;
 
     function init(fw) {
         variables.fw = fw;
     }
 
-    function checkAuthorization(any rc) {
+    function checkAuthorization(rc) {
         rc.authenticated = structKeyExists(session, "userid");
         if(rc.authenticated) {
-            rc.user = userService.get(session.userid);
+            rc.user = variables.user.get(session.userid);
         }
     }
 
-    function authenticate(any rc) {
+    function authenticate(rc) {
         rc.loginerrors = [];
         if(!len(trim(rc.username))) {
             arrayAppend(rc.loginerrors, "You must include a username.");
@@ -29,7 +30,7 @@ component accessors="true" {
         if(arrayLen(rc.loginerrors)) {
             variables.fw.redirect("user.login", "username,loginerrors");
         }
-        rc.user = userService.authenticate(rc.username, rc.password);
+        rc.user = variables.user.authenticate(rc.username, rc.password);
 
         if(!structKeyExists(rc, "user")) {
             rc.loginerrors[1] = "Your login failed.";
@@ -45,12 +46,12 @@ component accessors="true" {
             session.auth.isloggedin = true;
     }
 
-    function logout(any rc) {
+    function logout(rc) {
         structDelete(session, "userid");
         variables.fw.redirect("main.default");
     }
 
-    function register(any rc) {
+    function register(rc) {
         rc.registererrors = [];
         if(!len(trim(rc.username))) {
             arrayAppend(rc.registererrors, "You must include a username.");
@@ -76,7 +77,7 @@ component accessors="true" {
         } else {
             //Result is a user entity, but we only persist the ID
 
-            addUser = getUserService().register(rc.username, rc.password, rc.email);
+            addUser = variables.user.register(rc.username, rc.password, rc.email);
 
             session.userid = addUser.getId();
             variables.fw.redirect("main.default");

@@ -1,7 +1,8 @@
 /**
  * I am the question controller.
+ * @accessors true
  */
-component accessors="true" {
+component {
 
     property question;
 
@@ -11,24 +12,21 @@ component accessors="true" {
 
     //Used by a few methods to validate/load a question
     private function loadQuestion(rc) {
-        if(!structKeyExists(rc, "questionid") ||
-                    !isNumeric(rc.questionid) ||
+        if(!structKeyExists(rc, "questionid") || !isNumeric(rc.questionid) ||
                             rc.questionid <= 0) {
-
             variables.fw.redirect("main.default");
         }
-
-
     }
 
     public function list(rc) {
-        
+
         rc.result = variables.question.list();
 
         /*if (!structKeyExists(session, "isLoggedIn")) {
             rc.errors = "You are not logged in";
             variables.fw.redirect("main.default", "errors");
         }*/
+
         if(structKeyExists(rc, "start") && (!isNumeric(rc.start) ||
                             rc.start <= 0 || round(rc.start) != rc.start)) {
 
@@ -51,8 +49,7 @@ component accessors="true" {
             variables.fw.redirect("question.new", "title,text,errors");
         }
 
-        rc.data = variables.question.post(rc.title, rc.text,
-                                       session.auth.userid);
+        rc.data = variables.question.post(rc.title, rc.text, session.auth.userid);
         //Right now we assume the post just worked
         rc.questionid = rc.data.getId();
         variables.fw.redirect("question.view","none","questionid");
@@ -64,7 +61,7 @@ component accessors="true" {
         rc.question = variables.question.get(rc.questionid);
 
         rc.answer = trim(htmlEditFormat(rc.answer));
-        
+
         variables.question.postAnswer(rc.question, rc.answer,
                                         session.auth.userid);
 
@@ -75,9 +72,13 @@ component accessors="true" {
 
     function selectAnswer(rc) {
         loadQuestion(rc);
-        rc.question = questionService.getQuestion(rc.questionid);
+        rc.question = variables.question.getQuestion(rc.questionid);
 
-        if(!structKeyExists(rc, "user") || rc.user.getId() != rc.question.getUser().getID()) variables.fw.redirect("main.default");
+        if(!structKeyExists(rc, "user") ||
+            rc.user.getId() != rc.question.getUser().getID()) {
+
+            variables.fw.redirect("main.default");
+        }
 
         rc.questionid = rc.question.getId();
         variables.fw.redirect("question.view","none","questionid");
